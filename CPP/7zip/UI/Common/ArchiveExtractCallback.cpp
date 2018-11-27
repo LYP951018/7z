@@ -414,7 +414,8 @@ HRESULT CArchiveExtractCallback::SendMessageError_with_LastError(const char *mes
     s += NError::MyFormatMessage(errorCode);
   }
   AddPathToMessage(s, path);
-  return _extractCallback2->MessageError(s);
+  _extractCallback2->MessageError(s);
+  return errorCode;
 }
 
 HRESULT CArchiveExtractCallback::SendMessageError2(const char *message, const FString &path1, const FString &path2)

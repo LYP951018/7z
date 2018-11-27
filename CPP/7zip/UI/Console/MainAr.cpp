@@ -12,17 +12,14 @@
 #include "../Common/ExitCode.h"
 
 #include "ConsoleClose.h"
+#include "MainAr.h"
 
 using namespace NWindows;
 
 CStdOutStream *g_StdStream = NULL;
 CStdOutStream *g_ErrStream = NULL;
 
-extern int Main2(
-  #ifndef _WIN32
-  int numArgs, char *args[]
-  #endif
-);
+extern int Main2(const std::wstring& commandLine);
 
 static const char * const kException_CmdLine_Error_Message = "Command Line Error:";
 static const char * const kExceptionErrorMessage = "ERROR:";
@@ -46,12 +43,7 @@ static void PrintError(const char *message)
 
 #define NT_CHECK_FAIL_ACTION *g_StdStream << "Unsupported Windows version"; return NExitCode::kFatalError;
 
-int MY_CDECL main
-(
-  #ifndef _WIN32
-  int numArgs, char *args[]
-  #endif
-)
+int __cdecl DecompressConsole(const std::wstring& commandLine)
 {
   g_ErrStream = &g_StdErr;
   g_StdStream = &g_StdOut;
@@ -63,11 +55,7 @@ int MY_CDECL main
   
   try
   {
-    res = Main2(
-    #ifndef _WIN32
-    numArgs, args
-    #endif
-    );
+    res = Main2(commandLine);
   }
   catch(const CNewException &)
   {
@@ -97,6 +85,10 @@ int MY_CDECL main
     {
       PrintError(kUserBreakMessage);
       return (NExitCode::kUserBreak);
+    }
+    if (systemError.ErrorCode == ERROR_ACCESS_DENIED)
+    {
+        return NExitCode::kAccessDenied;
     }
     if (g_ErrStream)
     {

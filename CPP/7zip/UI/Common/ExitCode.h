@@ -18,8 +18,8 @@ enum EEnum {
   kMemoryError   = 8,     // Not enough memory for operation
   // kCreateFileError = 9,     // Create file error
   
-  kUserBreak     = 255   // User stopped the process
-
+  kUserBreak     = 255,   // User stopped the process
+  kAccessDenied
 };
 
 }

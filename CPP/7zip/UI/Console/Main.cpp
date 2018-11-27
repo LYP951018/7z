@@ -47,6 +47,7 @@
 #else
 #include "../../MyVersion.h"
 #endif
+#include <string>
 
 using namespace NWindows;
 using namespace NFile;
@@ -484,11 +485,7 @@ static void PrintHexId(CStdOutStream &so, UInt64 id)
 }
 
 
-int Main2(
-  #ifndef _WIN32
-  int numArgs, char *args[]
-  #endif
-)
+int Main2(const std::wstring& commandLine)
 {
   #if defined(_WIN32) && !defined(UNDER_CE)
   SetFileApisToOEM();
@@ -497,7 +494,7 @@ int Main2(
   UStringVector commandStrings;
   
   #ifdef _WIN32
-  NCommandLineParser::SplitCommandLine(GetCommandLineW(), commandStrings);
+  NCommandLineParser::SplitCommandLine(commandLine.c_str(), commandStrings);
   #else
   GetArguments(numArgs, args, commandStrings);
   #endif

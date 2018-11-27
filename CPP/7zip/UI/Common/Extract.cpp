@@ -214,7 +214,8 @@ static HRESULT DecompressArchive(
   if (result == S_OK)
     result = res2;
 
-  return callback->ExtractResult(result);
+  callback->ExtractResult(result);
+  return result;
 }
 
 /* v9.31: BUG was fixed:
